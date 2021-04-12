@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+<title>{% block title_page %} {{ actor.name }} {% endblock %}</title>
+
+{% block title %}
+<h1 class="head ml-4 text-center mx-auto">{{ actor.name }}</h1>
+{% endblock %}
+
+{%block content%}
+<div class="head ml-4 text-center mx-auto">
+    <img src="{{ actor.image.url }}"  alt="упс.. постер не загрузился.." width="500" height="700">
+</div>
+
+<br><h3>Информация о {{ actor.name }}</h3>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <p class="card-text">{{ actor.description|safe }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <div class="col-md-6" style="max-width: 700px;">
+                    <ul class="list-group list-group-flush">
+                    <table border="0" cellpadding="6">
+                        <tr>
+                            <td class="leftcol" width="55%" height="50">Возраст:</td>
+                            <td class="rightcol">{{ actor.age }} лет</td>
+                        </tr>
+                        <tr>
+                            <td class="leftcol">Режиссер:</td>
+                            <td class="rightcol">{% for movie in actor.film_director.all %} {{ movie.title }}<br> {% endfor %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="leftcol">Актер:</td>
+                            <td class="rightcol">{% for movie in actor.film_actor.all %} {{ movie.title }}<br> {% endfor %}</td>
+                        </tr>
+                    </table>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

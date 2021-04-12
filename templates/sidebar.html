@@ -1,0 +1,44 @@
+{% load movie_tags %}
+
+<div class="search-bar text-center mx-auto">
+    <h4>Поиск фильма</h4>
+    <form action="{% url 'search' %}" method="get" class="d-flex editContent">
+        <input type="search" placeholder="Введите название..." name="q"
+               class="form-control" required="">
+        <button class="btn btn-outline-success ml-1 my-1 badge badge-pill my-sm-1" type="submit"
+                style="width: 4rem;"><span class="fa fa-search"
+                                           aria-hidden="true"></span></button>
+    </form>
+</div>
+<!--preference -->
+<form action="{% url 'filter' %}" method="get">
+    <div class="left-side my-4">
+        <h4>Жанры</h4>
+        <ul class="w3layouts-box-list">
+            {% for genre in view.get_genres %}
+                <li class="editContent">
+                    <input type="checkbox" class="checked"  name="genre" value="{{ genre.id }}">
+                    <span class="span editContent">{{ genre.name }}</span>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+<!-- // preference -->
+<!-- discounts -->
+    <div class="left-side">
+        <h4>Год</h4>
+        <ul class="w3layouts-box-list">
+            {% for movie in view.get_years %}
+                <li class="editContent">
+                    <input type="checkbox" class="checked" name="year" value="{{ movie.year }}">
+                    <span class="span editContent">{{ movie.year }}</span>
+                </li>
+            {% endfor %}
+        </ul>
+        <button type="submit">Найти</button>
+    </div>
+
+</form>
+<!-- //discounts -->
+
+{% get_last_movies %}

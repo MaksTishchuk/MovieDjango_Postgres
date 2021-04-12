@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+<title>{% block title_page %} {{ title_page }} {% endblock %}</title>
+
+
+{% block title %}
+    <h2 class="head ml-4 text-center mx-auto">{{ title_content }}</h2>
+{% endblock %}
+
+
+
+{%block content%}
+
+<div class="container-fluid mt-5">
+    <div class="messages">
+        {% if messages %}
+        {% for message in messages %}
+        <p class="alert alert-{{ message.tags }}">
+            {{message}}
+        </p>
+        {% endfor %}
+        {% endif %}
+    </div>
+    <div class="mx-auto row row-cols-1 row-cols-md-2">
+        {% for movie in object_list %}
+        <div class="col-sm-4">
+            <div class="card bg-light border-dark mb-5" style="width: 25rem;">
+                <div class="card-body text-center">
+                    <h4 class="card-title">
+                        <a href="{{ movie.get_absolute_url }}" class="card-link">
+                            {{ movie.title }}<br><br>
+                            <img src="{{ movie.poster.url }}" class="card-img-top" alt="упс.. изображение не загрузилось.." width="350" height="450">
+                        </a>
+                    </h4>
+                    <p class="card-text font-weight-bold">{{ movie.tagline }}</p>
+                </div>
+                <ul class="list-group list-group-flush font-italic">
+                    <li class="list-group-item bg-light text-dark">Страна: {{ movie.country }}</li>
+                    <li class="list-group-item bg-light text-dark">
+                        Жанр: {% for genre in movie.genres.all %} {{ genre.name }} {% endfor %}
+                    </li>
+                    <li class="list-group-item bg-light text-dark">
+                        Режиссер: {% for director in movie.directors.all %} {{ director.name }} {% endfor %}
+                    </li>
+                    <li class="list-group-item bg-light text-dark">
+                        В ролях: {% for actor in movie.actors.all %} {{ actor.name }} {% endfor %}
+                    </li>
+                    <li class="list-group-item bg-light text-dark">Продолжительность: {{ movie.movie_duration }} мин.</li>
+                </ul>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% include 'pagination.html' %}<br>
+</div>
+
+{% endblock %}

@@ -1,0 +1,100 @@
+{% load subscribe_tags %}
+<footer class="editContent">
+    <div class="container">
+        <div class="row footer-top">
+            <div class="col-lg-5 footer-grid_section_w3layouts mr-4">
+                <h2 class="logo-2 mb-lg-4 mb-3">
+                    <a href="index.html" class="editContent">
+                                <span class="fa" aria-hidden="true">
+                                    Максим Тищук
+                                </span>
+                    </a>
+                </h2>
+
+                <table border="0">
+                    <tr>
+                        <td class="leftcol" width="45%"><p class="editContent">Окончил:</p></td>
+                        <td class="rightcol"><p class="editContent">Киевский Национальный Университет
+                            Строительства и Архитектуры</p></td>
+                    </tr>
+                    <tr>
+                        <td class="leftcol"><p class="editContent">Год выпуска:</p></td>
+                        <td class="rightcol"><p class="editContent">2018</p></td>
+                    </tr>
+                    <tr>
+                        <td class="leftcol"><p class="editContent">Степень:</p></td>
+                        <td class="rightcol"><p class="editContent">Магистр</p></td>
+                    </tr>
+                    <tr>
+                        <td class="leftcol"><p class="editContent">Специальность:</p></td>
+                        <td class="rightcol"><p class="editContent">Автоматизация и
+                            компьютерно-интегрированные технологии</p></td>
+                    </tr>
+                </table>
+
+                <h4 class="sub-con-fo ad-info my-4 editContent">Catch on Social</h4>
+                <ul class="w3layouts_social_list media-soc list-unstyled">
+                    <li>
+                        <a href="https://www.facebook.com/profile.php?id=100012110915966" class="w3pvt_facebook editContent">
+                            <span class="fa fa-facebook-f"></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-lg-6 footer-right">
+                <div class="w3layouts-news-letter">
+                    {% subsribe_form %}
+                </div>
+                <div class="row mt-lg-4 bottom-w3layouts-sec-nav mx-0">
+                    <div class="col-md-6 footer-grid_section_w3layouts">
+                        <h3 class="footer-title text-uppercase editContent mb-lg-4 mb-3">
+                            Разделы</h3>
+                        <ul class="list-unstyled w3layouts-icons">
+                            <li>
+                                <a href="{% url 'movies_list' %}" class="editContent">Главная</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'category' %}?category=1" class="editContent" name="category">Фильмы</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'category' %}?category=2" class="editContent">Сериалы</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'category' %}?category=3" class="editContent">Мультфильмы</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6 footer-grid_section_w3layouts my-md-0 my-5">
+                        <h3 class="footer-title text-uppercase text-wh mb-lg-4 mb-3 editContent">
+                            Контактная информация</h3>
+                        <div class="contact-info">
+                            <div class="footer-address-inf my-4">
+                                <h4 class="ad-info mb-2 editContent">Email</h4>
+                                <p class="editContent"><a href="mailto:makstischuk@gmail.com">makstischuk@gmail.com</a>
+                                </p>
+                            </div>
+                            <div class="footer-address-inf">
+                                <h4 class="ad-info mb-2 editContent">Местонахождение</h4>
+                                <p class="editContent">Киев, Украина</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- //footer -->
+<div class="cpy-right py-3">
+    <div class="container">
+        <div class="row">
+            <p class="col-md-10 text-left">© 2020 MaksMovie. All rights reserved | Design by
+                <a href="https://www.facebook.com/profile.php?id=100012110915966" style="color: darkblue"> Maks Tishchuk</a>
+            </p>
+            <!-- move top icon -->
+            <a href="#home" class="move-top text-right col-md-2"><span
+                    class="fa fa-long-arrow-up" aria-hidden="true"></span></a>
+            <!-- //move top icon -->
+        </div>
+    </div>
+</div>

@@ -1,0 +1,202 @@
+{% extends "base.html" %}
+{% load static i18n %}
+
+<title>{% block title_page %} {{ movie.title }} {% endblock %}</title>
+
+{% block title %}
+<h1 class="head ml-4 text-center mx-auto">{{ movie.title }}</h1>
+<h5 class="text-center mx-auto"><small class="text-muted font-italic">{{ movie.tagline }}</small></h5><br>
+{% endblock %}
+
+{%block content%}
+<div class="head ml-4 text-center mx-auto">
+    <img src="{{ movie.poster.url }}"  alt="упс.. постер не загрузился.." width="500" height="700">
+</div>
+
+<div class="head ml-4 text-center mx-auto">
+    <form action="{% url 'add_rating' %}" method="post" name="rating">
+        <h4><br>{% trans 'Рейтинг' %}: {{ average_rating }}</h4>
+        {% csrf_token %}
+        <input type="hidden" value="{{ movie.id }}" name="movie">
+        <p>Оценить фильм:</p>
+        <div class="rating">
+            {% for key, value in star_form.fields.star.choices %}
+                <input id="rating{{ value }}" type="radio" name="star"
+                   value="{{ key }}">
+                <label for="rating{{ value }}">{{ key }}</label>
+            {% endfor %}
+        </div>
+    </form>
+</div>
+
+<br><h3>{% trans 'Информация о фильме:' %}</h3>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{% trans 'Описание фильма:' %}</h5>
+                <p class="card-text">{{ movie.description|safe }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <div class="col-md-6" style="max-width: 700px;">
+                    <ul class="list-group list-group-flush">
+                        <table border="0" cellpadding="6">
+                            <tr>
+                                <td class="leftcol" width="55%" height="50">{% trans 'Год' %}:</td>
+                                <td class="rightcol">{{ movie.year }}</td>
+                            </tr>
+                            <tr>
+                                <td class="leftcol">{% trans 'Страна' %}:</td>
+                                <td class="rightcol">{{ movie.country }}</td>
+                            </tr>
+                            <tr>
+                                <td class="leftcol">{% trans 'Мировая премьера' %}:</td>
+                                <td class="rightcol">{{ movie.world_premiere }}</td>
+                            </tr>
+                            <tr>
+                                <td class="leftcol">{% trans 'Жанр' %}:</td>
+                                <td class="rightcol">{% for genre in movie.genres.all %} {{ genre.name }} {% endfor %}</td>
+                            </tr>
+                            <tr>
+                                <td class="leftcol">{% trans 'Режиссер' %}:</td>
+                                <td class="rightcol">
+                                    {% for director in movie.directors.all %}
+                                        <a href="{{ director.get_absolute_url }}">
+                                            {{ director.name }}
+                                        </a>
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="leftcol">{% trans 'В ролях' %}:</td>
+                                <td class="rightcol">
+                                    {% for actor in movie.actors.all %}
+                                        <a href="{{ actor.get_absolute_url }}">
+                                            {{ actor.name }}
+                                        </a>
+                                    {% endfor %}</td>
+                            </tr>
+                            <tr>
+                                <td class="leftcol">{% trans 'Продолжительность фильма' %}:</td>
+                                <td class="rightcol">{{ movie.movie_duration }} мин.</td>
+                            </tr>
+                            <tr>
+                                <td class="leftcol">{% trans 'Бюджет' %}:</td>
+                                <td class="rightcol">$ {{ movie.budget }}</td>
+                            </tr>
+                            <tr>
+                                <td class="leftcol">{% trans 'Сборы в США' %}:</td>
+                                <td class="rightcol">$ {{ movie.fees_in_usa }}</td>
+                            </tr>
+                            <tr>
+                                <td class="leftcol">{% trans 'Сборы в мире' %}:</td>
+                                <td class="rightcol">$ {{ movie.fees_in_world }}</td>
+                            </tr>
+                        </table>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="row sub-para-w3layouts mt-5">
+
+    <h3 class="shop-sing editContent" style="outline: none; cursor: inherit;">
+        {% trans 'Кадры из фильма' %} {{ movie.title }}
+    </h3>
+    <p>
+        {% for image in movie.movieshots_set.all %}
+            <img src="{{ image.image.url }}" class="img-fluid" alt="{{ image.description }}" width="600" height="800">
+        {% endfor %}
+    </p>
+</div>
+        <div class="row">
+            <div class="single-form-left">
+                <!-- contact form grid -->
+                <div class="contact-single">
+                    <h3 class="editContent">
+                        <span class="sub-tittle editContent">{% trans 'Отзывов' %}: {{ movie.reviews_set.count }}</span></h3>
+                    <h4 class="editContent">
+                        {% trans 'Оставить отзыв' %}:
+                    </h4>
+                    <form action="{% url 'add_review' movie.id %}" method="post" class="mt-4"
+                          id="formReview">
+                        {% csrf_token %}
+                        <input type="hidden" name="parent" id="contactparent" value="">
+                        <div class="form-group editContent">
+                            <label for="contactcomment" class="editContent">
+                                {% trans 'Ваш комментарий' %}*
+                            </label>
+                            {{ review_form.text }}
+                        </div>
+                        <div class="d-sm-flex">
+                            {% if not user.is_authenticated %}
+                            <div class="col-sm-5 form-group p-0 editContent">
+                                <label for="contactusername" class="editContent">
+                                    {% trans 'Имя' %}*
+                                </label>
+                                {{ review_form.name }}
+                            </div>
+                            <div class="col-sm-7 form-group ml-sm-3 editContent">
+                                <label for="contactemail" class="editContent">
+                                    Email
+                                </label>
+                                {{ review_form.email }}
+                            </div>
+                            {% else %}
+                            <div class="col-sm-1 form-group p-0 editContent" style="visibility: hidden;">
+                                {{ review_form.name }}
+                            </div>
+                            {% endif %}
+                            {{ review_form.captcha }}
+                        </div>
+                        <button type="submit"
+                                class="mt-1 btn btn-success btn-block py-3">
+                            {% trans 'Отправить' %}
+                        </button>
+                    </form>
+                </div>
+                <!--  //contact form grid ends here -->
+            </div>
+        </div>
+        <div class="mt-4">
+            {% for review in movie.get_review %}
+                <div class="media py-3">
+                    <img src="/media/avatar.png" class="mr-3 img-fluid" alt="image" width="60" height="110">
+                    <div class="media-body mt-4">
+                        <h5 class="mt-0 editContent">
+                            {{ review.name }} (<small>{{ review.date }}</small>)
+                        </h5>
+                        <p class="mt-2 editContent">
+                            {{ review.text }}
+                        </p>
+                        <a href="#formReview"
+                           onclick="addReview('{{ review.name }}', '{{ review.id }}')">{% trans 'Ответить' %}</a>
+                        {% for rew in review.reviews_set.all %}
+                            <div class="media mt-3 editContent">
+                                <a class="pr-3" href="#">
+                                    <img src="/media/avatar.png" class="img-fluid" alt="image" width="50" height=90">
+                                </a>
+                                <div class="media-body">
+                                    <h5 class="mt-0 editContent">{{ rew.name }} (<small>{{ rew.date }}</small>)</h5>
+                                    <p class="mt-2 editContent">{{ rew.text }}</p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    <script>
+        function addReview(name, id) {
+            document.getElementById("contactparent").value = id;
+            document.getElementById("contactcomment").innerText = `${name}, `
+        }
+    </script>
+{% endblock %}

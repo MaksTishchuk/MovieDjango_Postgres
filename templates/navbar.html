@@ -1,0 +1,75 @@
+{% load i18n movie_tags %}
+
+<header class="header">
+    <div class="container-fluid px-lg-5">
+        <!-- nav -->
+        <nav class="py-4">
+            <div id="logo">
+                <h1><a href="" class="editContent"
+                       style="outline: none; outline-offset: -2px; cursor: inherit; color: rgb(255, 255, 255); font-size: 40px; background-color: rgba(0, 0, 0, 0); font-family: Source Sans Pro;, sans-serif;">MaksMovie</a>
+                </h1>
+            </div>
+
+            <label for="drop" class="toggle">Menu</label>
+            <input type="checkbox" id="drop">
+            <ul class="menu mt-2">
+                <li class="active"><a href="{% url 'movies_list' %}">Главная</a></li>
+                <li>
+                    <!-- First Tier Drop Down -->
+                    <label for="drop-2" class="toggle">Категории <span
+                            class="fa fa-angle-down" aria-hidden="true"></span> </label>
+                    <a href="">Категории <span class="fa fa-angle-down"
+                                                aria-hidden="true"></span></a>
+                    <input type="checkbox" id="drop-2">
+                        <ul>
+                            <form action="{% url 'category' %}" method="get">
+                                {% get_categories as categories %}
+                                {% for category in categories %}
+                                <li class="editContent">
+                                    <input type="checkbox" class="checked" name="category" value="{{ category.id }}">
+                                    <span class="span editContent">{{ category.name }}</span>
+                                </li>
+                                {% endfor %}
+                                <button type="submit">Показать</button>
+                            </form>
+                        </ul>
+
+
+                </li>
+                <li>
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'account_logout' %}">Выйти ({{ user.username }})</a>
+                    {% else %}
+                    <a href="{% url 'account_login' %}">Вход</a>
+                    <a href="{% url 'account_signup' %}">Регистрация</a>
+                    {% endif %}
+                </li>
+                <li>
+                    <form action="{% url 'set_language' %}" method="post">{% csrf_token %}
+                        <input name="next" type="hidden" value="{{ redirect_to }}">
+                            <select name="language">
+                                {% get_current_language as LANGUAGE_CODE %}
+                                {% get_available_languages as LANGUAGES %}
+                                {% get_language_info_list for LANGUAGES as languages %}
+                                {% for language in languages %}
+                                <option value="{{ language.code }}" {% if language.code == LANGUAGE_CODE %} selected {% endif %}>
+                                    {{ language.name_local }} ({{ language.code }})
+                                </option>
+                                {% endfor %}
+                            </select>
+                        <input type="submit" value="Go">
+                    </form>
+                </li>
+            </ul>
+        </nav>
+        <!-- //nav -->
+    </div>
+</header>
+<!-- //header -->
+<!--/banner-->
+<div class="banner-info">
+    <div class="ban-buttons">
+
+    </div>
+</div>
+<!--// banner-inner -->
