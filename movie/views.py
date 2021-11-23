@@ -106,27 +106,30 @@ class FilterMovieView(GenreYear, ListView):
 
 
 class CategoryMovieView(GenreYear, ListView):
-    """Фильтрация фильмов"""
+    """Фильмы по категориям"""
     paginate_by = 4
 
     def get_queryset(self):
-        queryset = Movie.objects.filter(
-                Q(category__in=self.request.GET.getlist('category'))
-        ).prefetch_related("genres", "actors", "directors")
+        if self.request.GET.getlist('category'):
+            queryset = Movie.objects.filter(
+                    Q(category__in=self.request.GET.getlist('category'))
+            ).prefetch_related("genres", "actors", "directors")
+        else:
+            queryset = Movie.objects.all()
         return queryset.distinct()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        category = self.request.GET.getlist('category')
-        if len(category) == 0:
+        category_list = self.request.GET.getlist('category')
+        if len(category_list) == 0:
             context['title_page'] = 'Фильтр по категориям'
-            context['title_content'] = f'Вы не выбрали ни одной категории'
-        elif len(category) != 1:
+        elif len(category_list) != 1:
             context['title_page'] = 'Фильтр по категориям'
-            context['title_content'] = f'Фильтр по выбранным категориям'
+            context['title_content'] = f'Фильтр по выбранным категориям: ' + ', '.join(
+                [(Category.objects.get(id=int(c)).name) for c in self.request.GET.getlist("category")])
         else:
-            context['title_page'] = Category.objects.get(id=int(category[0]))
-            context['title_content'] = f'Результаты поиска по категории "{Category.objects.get(id=int(category[0]))}"'
+            context['title_page'] = Category.objects.get(id=int(category_list[0]))
+            context['title_content'] = f'Результаты поиска по категории "{Category.objects.get(id=int(category_list[0]))}"'
         context["category"] = ''.join([f"category={c}&" for c in self.request.GET.getlist("category")])
         return context
 
