@@ -19,12 +19,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 't4%m^mbqgj4t8(7ffb_wc0$giu(x$c62u%dxbd1pi%d%czny*!'
+SECRET_KEY = f'{os.environ.get("SECRET_KET")}'
+# SECRET_KEY = 't4%m^mbqgj4t8(7ffb_wc0$giu(x$c62u%dxbd1pi%d%czny*!'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(int(os.environ.get("DEBUG", default=1)))
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").replace('"', '').split(" ")
 
 # Application definition
 
@@ -97,14 +98,32 @@ WSGI_APPLICATION = 'test_auth.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'movie_for_django',
-        'USER': 'postgres',
-        'PASSWORD': '900437431940',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'ENGINE': os.environ.get("SQL_ENGINE", 'django.db.backends.sqlite3'),
+        'NAME': os.environ.get("SQL_DATABASE", os.path.join(BASE_DIR, "db.sqlite3")),
+        'USER': os.environ.get("SQL_USER", "user"),
+        'PASSWORD': os.environ.get("SQL_PASSWORD", "password"),
+        'HOST': os.environ.get("SQL_HOST", "localhost"),
+        'PORT': os.environ.get("SQL_PORT", "5432")
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'movie_for_django',
+#         'USER': 'postgres',
+#         'PASSWORD': '900437431940',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
+# }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
 
 
 # Password validation
@@ -153,14 +172,27 @@ LOCALE_PATHS = (
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-STATIC_URL = '/static/'
+
+STATIC_URL = '/staticfiles/'
+
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static')
+     os.path.join(BASE_DIR, 'static')
 ]
 STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 ]
+
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+
+# STATIC_URL = '/static/'
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'static')
+# ]
+# STATICFILES_FINDERS = [
+#     "django.contrib.staticfiles.finders.FileSystemFinder",
+#     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+# ]
 # STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 
@@ -169,6 +201,16 @@ MEDIA_URL = '/media/'
 
 
 CKEDITOR_UPLOAD_PATH = "uploads/"
+
+
+CORS_ORIGIN_WHITELIST = [
+    "http://localhost:8000",
+    "http://localhost:8080",
+    "http://localhost:8081",
+    "http://127.0.0.1:8000",
+    "http://127.0.0.1:8080",
+]
+
 
 # ACCOUNT_SIGNUP_FORM_CLASS = 'localusers.forms.SignupForm'
 # ACCOUNT_ADAPTER = 'localusers.adapters.AccountAdapter'
